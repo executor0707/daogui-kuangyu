@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="description" content="《道诡异仙》同人互动叙事：在精神病院与清风观之间搬运物件、说诳语、选择哪一边是真的。" />
+<meta name="theme-color" content="#14110f" />
+<title>道诡异仙：诳语双界</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%239b2d22'/%3E%3Ctext x='32' y='44' font-size='40' text-anchor='middle' fill='%23f6ecdc' font-family='serif'%3E诳%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body data-world="real">
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="seal">诳</span>
+        <div class="brand-text"><b>道诡异仙</b><span>诳语双界 · 同人互动叙事</span></div>
+      </div>
+      <div class="meta">
+        <span id="act-label" class="act-label">第一幕 · 糖</span>
+        <button id="btn-help" class="ghost" type="button">玩法</button>
+        <button id="btn-save" class="ghost" type="button">存档</button>
+        <button id="btn-load" class="ghost" type="button">读档</button>
+      </div>
+    </header>
+
+    <nav class="hud" aria-label="状态">
+      <div class="hud-item time" title="这一夜还能做几件事">
+        <span class="hud-k">时辰</span><span id="hud-time" class="hud-v">3</span>
+        <span class="incense" aria-hidden="true"><i></i></span>
+      </div>
+      <div class="hud-item daoyun" title="道韵：两界重叠的程度。满十即谵妄。">
+        <span class="hud-k">道韵</span><span id="hud-daoyun" class="hud-v">0</span>
+        <div class="bar"><span id="hud-daoyun-bar"></span></div>
+      </div>
+      <div class="hud-item wide" title="每个 NPC 的怀疑与信任">
+        <span class="hud-k">人心</span>
+        <div id="suspicion" class="npcs"></div>
+      </div>
+    </nav>
+
+    <main class="stage">
+      <section class="scene" aria-live="polite">
+        <div id="scene-art" class="scene-art" data-art="ward" data-world="real">
+          <div class="art-layer ink"></div>
+          <div class="art-layer wash"></div>
+          <div class="art-layer grain"></div>
+          <div id="art-caption" class="art-caption"></div>
+        </div>
+        <div class="scene-body">
+          <div class="scene-head">
+            <span id="scene-loc" class="scene-loc">14 号病房</span>
+            <h1 id="scene-title">熄灯之后</h1>
+          </div>
+          <p id="scene-objective" class="objective">把玉佩藏好，赶在查房前回到床上。</p>
+          <div id="scene-text" class="scene-text"></div>
+          <div id="actions" class="actions" role="group" aria-label="可做的事"></div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="card">
+          <h2>怀中</h2>
+          <div id="inventory" class="inventory"></div>
+          <p class="micro">最多带 3 件。带过去，它会变。</p>
+        </section>
+        <section class="card">
+          <h2>你记得</h2>
+          <div id="known" class="known"></div>
+        </section>
+        <section class="card">
+          <h2>说过的话</h2>
+          <div id="said" class="said"></div>
+        </section>
+        <section class="card logcard">
+          <h2>近事</h2>
+          <div id="log" class="log"></div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="foot">
+      <span>改编自狐尾的笔《道诡异仙》· 非官方同人作品，原作版权归作者所有</span>
+      <span class="dot">·</span>
+      <span>16+ · 心理恐怖 · 无内购无联网</span>
+    </footer>
+  </div>
+
+  <div id="panel" class="panel" role="dialog" aria-modal="true" aria-label="诳语"></div>
+  <div id="result" class="result" role="status"></div>
+  <div id="ending" class="ending" role="dialog" aria-modal="true"></div>
+  <div id="toast" class="toast" role="status"></div>
+
+  <div id="help" class="help">
+    <div class="help-inner">
+      <h2>怎么玩</h2>
+      <ol>
+        <li><b>点选项</b>推进这一夜。每个选项会花掉时辰，也可能让人起疑。</li>
+        <li><b>闭眼/睁眼</b>在两个世界之间往返。每次回到这边，道韵 +1。</li>
+        <li><b>怀里的东西跨界会变</b>：糖会变铁钉，玉会变石头。变过的东西，在另一边才有用。最多带 3 件。</li>
+        <li><b>诳语</b>是你唯一能左右人心的手段：选一句要说的话，可以再出示一件证物。对方信不信，取决于他已知的事、你对他的信用，以及你身上“不对劲”的程度。</li>
+        <li><b>说出去的话会被记住</b>，下一幕有人会拿它来问你。</li>
+        <li>道韵满 10、怀疑满 3，或骗不过丹阳子，都会失败；可以重来。</li>
+      </ol>
+      <p class="micro">键盘：1–9 选择，空格/回车继续，Esc 关闭。存档只存在你自己的浏览器里。</p>
+      <button id="help-close" class="btn primary" type="button">知道了</button>
+    </div>
+  </div>
+
+  <script src="art.js"></script>
+  <script src="content.js"></script>
+  <script src="engine.js"></script>
+  <script>
+    (function () {
+      function boot() {
+        try {
+          window.Game.init(window.CONTENT);
+        } catch (err) {
+          document.body.innerHTML = '<pre style="color:#e8dcc8;padding:24px;white-space:pre-wrap">游戏启动失败：' + (err && err.message) + '\n' + (err && err.stack || '') + '</pre>';
+          throw err;
+        }
+      }
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+      else boot();
+    })();
+  </script>
+</body>
+</html>
